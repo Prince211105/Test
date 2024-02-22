@@ -43,7 +43,52 @@
 .props-img {
   height: 100px;
   width: 100;
+}
+.oneline {
+  display: flex;
   
+  gap: 3px;
+}
+
+.phonebookdata{
+  justify-content: center;
+  background-color: rgba(127, 255, 212, 0.543);
+  align-items: center;
+  text-align: center;
+  padding: 25px;
+  margin-top: 3.5%;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-bottom: 3.5%; 
+  
+  box-shadow: 5px 5px 5px rgba(1, 1, 1, 1);
   
 }
 
+
+button{
+  font-size: 15px;
+  font-weight: 600;
+  color: black;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-right: 10px;
+  padding-left: 10px;
+  background-color: rgba(129, 67, 67, 0.476);
+}
+p{
+  font-size: 20px;
+  font-weight: 549;
+}
+label{
+  font-size: 20px;
+  font-weight: 549;
+}
+body{
+  background-color: cadetblue;
+}
+
+input {
+  padding: 1%;
+  font-size: 15px;
+}
