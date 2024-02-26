@@ -2,74 +2,74 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 function Task11() {
   const App = () => {
-    const [persons, setPersons] = useState([]);
-    const [newname, setNewName] = useState("");
-    const [newNumber, setNewNumber] = useState("");
+    const [persons, setpersons] = useState([]);
+    const [newname, setnewname] = useState("");
+    const [newnumber, setnewnumber] = useState("");
     const [search, setsearch] = useState("");
 
     useEffect(() => {
       axios.get("http://localhost:3001/persons").then((response) => {
-        setPersons(response.data);
+        setpersons(response.data);
       });
-    },[]);
+    });
 
-    const addPeople = (event) => {
+    
+    const addNote = (event) => {
       event.preventDefault();
-
-      const AddNewPeople = persons.find((person) => person.name === newname);
-      if (AddNewPeople) {
-        alert(`${newname} ${newNumber} This is a alredy add in the phonebook`);
+      const Entername = persons.filter((person) => person.name === newname);
+      if (Entername) {
+        alert(`${newname} ${newnumber} This is alreday phonebook`);
       }
-      setPersons([...persons, { name: newname, number: newNumber }]);
-      setNewName("");
-      setNewNumber("");
+      setpersons([...persons, { name: newname, number: newnumber }]);
+      setnewname("");
+      setnewnumber("");
     };
-    const filterdataonphonebook = persons.filter((person) =>
+    const filterphonebook = persons.filter((person) =>
       person.name.toLowerCase().includes(search.toLowerCase())
     );
+    // const filterdataonphonebook = persons.filter((person) =>
+    //   person.name.toLowerCase().includes(search.toLowerCase())
+    // );
     return (
-      <div className="Phonrbook">
+      <div>
         <h2>Phonebook</h2>
 
         <div>
-          Search : {""}
+          Search :
           <input
-            type="search"
+            type="text"
             value={search}
             onChange={(e) => setsearch(e.target.value)}
           />
         </div>
 
-        <h3>Add a new people in phonebook</h3>
-        <form onSubmit={addPeople}>
+        <h3>Add a new</h3>
+        <form onSubmit={addNote}>
           <div>
-            Name : {""}
+            Name :
             <input
               type="text"
               value={newname}
-              onChange={(e) => setNewName(e.target.value)}
+              onChange={(e) => setnewname(e.target.value)}
             />
-          </div>
+          </div>{" "}
           <br />
           <div>
-            Number : {""}
+            Number :
             <input
               type="text"
-              value={newNumber}
-              onChange={(e) => setNewNumber(e.target.value)}
+              value={newnumber}
+              onChange={(e) => setnewnumber(e.target.value)}
             />
           </div>
-          <br />
           <div>
             <button type="submit">Add new</button>
           </div>
         </form>
-
         <h3>Numbers</h3>
-
-        {filterdataonphonebook.map((person, index) => (
+        {filterphonebook.map((person, index) => (
           <p key={index}>
-            {person.name} {person.number}
+            {person.name} : {person.number}
           </p>
         ))}
       </div>

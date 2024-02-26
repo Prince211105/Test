@@ -1,33 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function Task15() {
+function Task16() {
   const App = () => {
     const [persons, setpersons] = useState([]);
     const [newName, setnewName] = useState("");
     const [newNumber, setnewNumber] = useState("");
     const [search, setsearch] = useState("");
     const [EditingPerson, setEditingPerson] = useState(null);
-
-    /*
-    you have get the data api methos is (GET)
-    */
-
+    const [notification, setNotification] = useState(null);
     useEffect(() => {
       axios.get("http://localhost:3001/persons").then((response) => {
         setpersons(response.data);
-      });
-    });
+      })
+    }, [notification]);
 
-    /*
-    // you have use this method and use to add the data in database
-    
-    */
+    const shownotification = (message) => {
+      setNotification(message);
+      setTimeout(() => {
+        setNotification(null);
+      }, 10000);
+    };
 
     const addNote = (event) => {
       event.preventDefault();
       const confirmed = window.confirm(
-        `${newName} and ${newNumber} was added to the phonebook`
+        `${newName} and ${newNumber} is add the data`
       );
       if (confirmed) {
         const newObject = {
@@ -41,82 +39,78 @@ function Task15() {
           .post("http://localhost:3001/persons", newObject)
           .then((response) => {
             setpersons(persons.concat(response.data));
-          });
+            shownotification(`${newName} added successfully!`);
+          }).catch((error) => {
+            alert(`the note is already delete ${newName}`)
+          })
+        setnewName("");
+        setnewNumber("");
       }
     };
 
-    /*
-        this method was delete the data on database
-    */
-
-    const deletePerson = (id, name) => {
-      const confirmed = window.confirm(`you have delete ${name} ?`);
+    const deletedata = (id, name) => {
+      const confirmed = window.confirm(`${name} Delete ?`);
       if (confirmed) {
         axios.delete(`http://localhost:3001/persons/${id}`).then(() => {
-          setpersons(persons.filter((person) => person.id !== id));
+          setpersons(persons.filter((person) => person.id === id));
+          shownotification("Person deleted successfully!");
         });
       }
     };
 
-    /*
-        this method was Edit to the data and store to the databas
-    */
-
     const Editdata = (person) => {
+      setEditingPerson(person.id);
       setnewName(person.name);
       setnewNumber(person.number);
-      setEditingPerson(person.id);
     };
 
-    const saveChage = (id) => {
+    const saveChange = (id) => {
       const confirmed = window.confirm(
-        `${newName} is already added to phonebook, replace the old number ${newNumber} with a new one ${newNumber}?`
+        ` you have change this data ${newName} and ${newNumber}.`
       );
-
       if (confirmed) {
-        const update = {
+        const newobject = {
           name: newName,
           number: newNumber,
         };
-        axios.put(`http://localhost:3001/persons/${id}`, update).then(() => {
+        axios.put(`http://localhost:3001/persons/${id}`, newobject).then(() => {
           setpersons(
             persons.map((person) =>
-              person.id === id ? { ...person, ...update } : person
+              person.id === id ? { ...person, ...newobject } : person
             )
           );
           setnewName("");
           setnewNumber("");
           setEditingPerson(null);
+          shownotification("Changes save successfully!");
         });
       }
     };
-
-    /*
-        this was filter it was work to the search any persone data and will give the data
-    */
-
     const filterofalldata = persons.filter((person) =>
       person.name.toLowerCase().includes(search.toLowerCase())
     );
-
     return (
-      <div className="phonebookdata">
-        <h1>Create a PhoneBook</h1>
+        
+      <div>
+        <h1>Create a phonebook</h1>
+        {notification && (
+          <div className="notification" style={{ color: "green" }}>
+            {notification}
+          </div>
+        )}
         <div>
-          <label>Search :</label>{" "}
+          Search :{" "}
           <input
             type="text"
             value={search}
             onChange={(e) => setsearch(e.target.value)}
           />
         </div>
-        {/* 
-            This filed was form  
-        */}
-        <h2>Add new people</h2>
+
+        <h2>Add new person</h2>
         <form onSubmit={addNote}>
           <div>
-            <label>Name :</label>{" "}
+            Name :{" "}
             <input
               type="text"
               value={newName}
@@ -125,7 +119,7 @@ function Task15() {
           </div>
           <br />
           <div>
-            <label>Number :</label>{" "}
+            Number :{" "}
             <input
               type="text"
               value={newNumber}
@@ -138,40 +132,30 @@ function Task15() {
           </div>
         </form>
 
-        <h2>All Phonebook Data</h2>
-        {/* 
-            This filed is show the data 
-        */}
+        <h2>Phonebook Data</h2>
         <div>
           {filterofalldata.map((person) => (
             <div key={person.id}>
               {EditingPerson === person.id ? (
                 <div>
-                  <label>Name :</label>{" "}
-                  <input
-                    type="text"
-                    value={newName}
-                    onChange={(e) => setnewName(e.target.value)}
-                  />
-                  &nbsp;&nbsp;
-                  <label>Number :</label>{" "}
+                  Name : <input type="text" value={newName} />
+                  &nbsp;&nbsp; Number :{" "}
                   <input
                     type="text"
                     value={newNumber}
                     onChange={(e) => setnewNumber(e.target.value)}
                   />
                   &nbsp;&nbsp;
-                  <button onClick={() => saveChage(person.id)}>
-                    Save change
+                  <button onClick={() => saveChange(person.id)}>
+                    Save Change
                   </button>
                 </div>
               ) : (
                 <p>
-                  {person.name} {person.number} &nbsp;
-                  <button onClick={() => deletePerson(person.id, person.name)}>
+                  {person.name} {person.number}&nbsp;&nbsp;
+                  <button onClick={() => deletedata(person.id, person.name)}>
                     Delete
-                  </button>{" "}
-                  &nbsp;
+                  </button>
                   <button onClick={() => Editdata(person)}>Edit</button>
                 </p>
               )}
@@ -188,4 +172,4 @@ function Task15() {
   );
 }
 
-export default Task15;
+export default Task16;
