@@ -30,6 +30,11 @@ import PostData from "./PostData";
 import Task14 from "./Task14";
 import Task15 from "./Task15";
 import Task12 from './Task12'
+import Task16 from "./Task16";
+import Task17 from "./Task17";
+import Addnew from "./Addnew";
+import Task18 from './Task18'
+import Task19 from "./Task19";
 function Allpart2() {
   return (
     <div>
@@ -60,7 +65,12 @@ function Allpart2() {
       {/* <PostData/> */}
       {/* <Task14/> */}
       {/* <Task15/> */}
-      <Task12/>
+      {/* <Task12/> */}
+      {/* <Task16/> */}
+      {/* <Task17/> */}
+      {/* <Addnew/> */}
+      {/* <Task18/> */}
+      <Task19/>
     </div>
   );
 }
